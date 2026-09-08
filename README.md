@@ -27,6 +27,8 @@ ResearchPrj からは `setup_env.m` 経由で自動的にパスが通ります
 | 関数 | 概要 |
 |---|---|
 | `setup_plot_style(ax, font_size)` | 共通スタイル（白背景・Times New Roman・minor tick・grid）。軸ラベルは呼び出し側で設定 |
+| `setup_ipe_plot(fig, preset, opts)` | Ipeでの図版作成（スライド `slide_single`/`slide_multi`、論文 `paper_column`/`paper_full`/`paper_multi`）に最適化した物理寸法・LaTeXインタープリタ・フォント・線幅を一括適用 |
+| `export_ipe_plot(fig, output_path, opts)` | Ipeでのベクター編集に最適化した透明背景（`BackgroundColor='none'`）のPDFを出力 |
 | `savefig_confirm(fig, output_path, opts)` | 上書き確認付き `exportgraphics`。`matlab -batch` 実行時（`~usejava('desktop')`）はダイアログなしで上書き。キャンセル時 `''` を返す |
 
 ### ImpedanceTools/ — インピーダンスアナライザTXTの解析

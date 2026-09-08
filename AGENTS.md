@@ -13,6 +13,8 @@
   - `steadymean(time_ms, x, t_window)`: 時間窓平均。絶対窓 `[t0 t1]` (ms) または末尾窓 `-N` (ms)
 - **`PlotTools/`**: 図の体裁・保存
   - `setup_plot_style(ax, font_size)`: 共通スタイル（白背景・Times New Roman・minor tick・grid）。
+  - `setup_ipe_plot(fig, preset, opts)`: Ipeでの取り込みに最適化したFigure寸法・全Axesスタイリング（`slide_single`, `slide_multi`, `paper_column`, `paper_full`, `paper_multi`）。
+  - `export_ipe_plot(fig, output_path, opts)`: Ipe用透明背景ベクターPDFのエクスポート。
   - `savefig_confirm(fig, output_path, opts)`: 上書き確認付き `exportgraphics`。`matlab -batch` 実行時（`~usejava('desktop')`）はダイアログなしで自動上書き。
 - **`ImpedanceTools/`**: インピーダンスアナライザTXTの解析
   - `read_impedance_trace(fp, 'A', num_cols)`: `"TRACE: A/B"` セクションのデータ抽出
