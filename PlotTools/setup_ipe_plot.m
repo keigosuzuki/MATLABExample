@@ -134,6 +134,23 @@ function setup_ipe_plot(fig, preset, opts)
         set(lgd, 'AutoUpdate', 'off');
     end
 
+    % カラーバーのスタイリング
+    all_cb = findall(fig, 'Type', 'colorbar');
+    for i = 1:numel(all_cb)
+        cb = all_cb(i);
+        set(cb, 'TickLabelInterpreter', opts.Interpreter, 'FontSize', max(base_font_size - 1.5, 7));
+        if ~isempty(cb.Label)
+            set(cb.Label, 'Interpreter', opts.Interpreter, 'FontSize', base_font_size);
+        end
+    end
+
+    % 独立 Text オブジェクトのスタイリング (等高線ラベル等)
+    all_text = findall(fig, 'Type', 'text');
+    for i = 1:numel(all_text)
+        t = all_text(i);
+        set(t, 'Interpreter', opts.Interpreter);
+    end
+
     % プロット線 (Line / Stair / Scatter) の線幅調整
     all_lines = findall(fig, 'Type', 'line');
     for i = 1:numel(all_lines)
