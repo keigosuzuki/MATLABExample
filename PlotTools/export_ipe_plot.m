@@ -61,13 +61,31 @@ function saved_path = export_ipe_plot(fig, output_path, opts)
     end
 
     % Ipe 用ベクター PDF のエクスポート
-    if opts.Transparent
-        exportgraphics(fig, output_path, 'ContentType', 'vector', 'BackgroundColor', 'none');
-    else
-        exportgraphics(fig, output_path, 'ContentType', 'vector', 'BackgroundColor', 'w');
+    is_ipe = endsWith(lower(output_path), '.ipe') || endsWith(lower(output_path), '.xml');
+    pdf_target = output_path;
+    if is_ipe
+        pdf_target = [tempname, '.pdf'];
     end
 
-    fprintf('Ipe用プロットを %s にエクスポートしました。\n', output_path);
+    if opts.Transparent
+        exportgraphics(fig, pdf_target, 'ContentType', 'vector', 'BackgroundColor', 'none');
+    else
+        exportgraphics(fig, pdf_target, 'ContentType', 'vector', 'BackgroundColor', 'w');
+    end
+
+    if is_ipe
+        cmd = sprintf('pdftoipe -literal "%s" "%s"', pdf_target, output_path);
+        [status, cmdout] = system(cmd);
+        if exist(pdf_target, 'file')
+            delete(pdf_target);
+        end
+        if status ~= 0
+            error('pdftoipe の実行に失敗しました: %s', cmdout);
+        end
+        fprintf('Ipeファイルを %s にエクスポートしました。\n', output_path);
+    else
+        fprintf('Ipe用プロットを %s にエクスポートしました。\n', output_path);
+    end
     saved_path = output_path;
 
 end

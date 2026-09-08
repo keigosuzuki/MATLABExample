@@ -68,6 +68,18 @@ function setup_ipe_plot(fig, preset, opts)
         base_font_size = opts.FontSize;
     end
 
+    % MATLAB 標準カラー順序を color_matlab.isy に完全一致させる
+    matlab_colors = [
+        0.000, 0.447, 0.714;  % matlab_blue
+        0.850, 0.325, 0.098;  % matlab_red
+        0.929, 0.694, 0.125;  % matlab_orange
+        0.494, 0.184, 0.556;  % matlab_purple
+        0.466, 0.674, 0.188;  % matlab_green
+        0.301, 0.745, 0.933;  % matlab_cyan
+        0.635, 0.078, 0.184   % matlab_brown
+    ];
+    set(fig, 'DefaultAxesColorOrder', matlab_colors);
+
     % Figure の物理寸法と背景色設定
     set(fig, 'Units', 'centimeters');
     pos = get(fig, 'Position');
@@ -75,12 +87,15 @@ function setup_ipe_plot(fig, preset, opts)
     set(fig, 'PaperUnits', 'centimeters');
     set(fig, 'PaperSize', [fig_w_mm / 10, fig_h_mm / 10]);
     set(fig, 'PaperPosition', [0, 0, fig_w_mm / 10, fig_h_mm / 10]);
-    set(fig, 'Color', 'w');
+    set(fig, 'Color', 'none');
 
     % 全 Axes の探索とスタイリング
     all_axes = findall(fig, 'Type', 'axes');
     for i = 1:numel(all_axes)
         ax = all_axes(i);
+
+        % カラー順序を適用
+        set(ax, 'ColorOrder', matlab_colors);
 
         % グリッドと副目盛り
         grid(ax, 'on');
