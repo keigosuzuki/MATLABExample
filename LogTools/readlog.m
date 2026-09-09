@@ -27,12 +27,12 @@ function data_struct = readlog(file_path)
         
         t = readtable(file_path, opts);
         
-        if isempty(t)
-            return;
-        end
-        
-        % 構造体に変換 (フィールド名を MATLAB の有効な形式に整形)
+        % readtable がヘッダ行を正しく判定できず Var1, Var2... となった場合はフォールバック
         vars = t.Properties.VariableNames;
+        if all(cellfun(@(x) ~isempty(regexp(x, '^Var\d+$', 'once')), vars))
+            error('Generic Var columns detected, falling back to header scanner');
+        end
+
         for i = 1:numel(vars)
             original_name = vars{i};
             % フィールド名として有効な形式に変換し、前後のアンダースコアを除去
@@ -88,9 +88,10 @@ function data_struct = readlog(file_path)
         frewind(fid);
         for k = 1:(data_start_line - 1), fgetl(fid); end
         
-        % textscan で 'nan' を NaN として扱うよう明示的に指定
+        % textscan で 'nan' などを空値・NaN として扱うよう明示的に指定
         data = textscan(fid, repmat('%f', 1, numel(headers)), 'Delimiter', ',', ...
-            'TreatAsNaN', {'nan', 'NaN', 'inf', 'Inf'}, 'MultipleDelimsAsOne', false);
+            'TreatAsEmpty', {'nan', 'NaN', 'inf', 'Inf'}, 'MultipleDelimsAsOne', false);
+
         fclose(fid);
         
         for i = 1:numel(headers)
